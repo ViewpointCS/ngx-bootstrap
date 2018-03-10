@@ -33,7 +33,10 @@ export class BsDropdownToggleDirective implements OnDestroy {
     // sync is open value with state
     this._subscriptions.push(
       this._state.isOpenChange.subscribe(
-        (value: boolean) => (this.isOpen = value)
+        (value: boolean) => {
+          this.isOpen = value;
+          if (value && this._state.autoClose) this.attachListeners();
+        }
       )
     );
     // populate disabled state
@@ -42,10 +45,6 @@ export class BsDropdownToggleDirective implements OnDestroy {
         (value: boolean) => (this.isDisabled = value || null)
       )
     );
-
-    if (this._state.autoClose) {
-      this.attachListeners();
-    }
   }
 
   @HostListener('click', [])
